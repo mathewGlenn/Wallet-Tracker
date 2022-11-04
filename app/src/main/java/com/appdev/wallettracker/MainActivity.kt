@@ -87,6 +87,7 @@ lateinit var binding: ActivityMainBinding
                         intent.putExtra("name", name)
                         intent.putExtra("balance", balance)
                         intent.putExtra("color", color)
+                        intent.putExtra("id", accountID)
                         startActivity(intent)
                     }
                 }
