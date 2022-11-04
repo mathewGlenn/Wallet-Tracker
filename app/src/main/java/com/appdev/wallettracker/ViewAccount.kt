@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.appdev.wallettracker.databinding.ActivityViewAccountBinding
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -22,6 +23,20 @@ class ViewAccount : AppCompatActivity() {
         val symbols = formatter.decimalFormatSymbols
         symbols.currencySymbol = "₱ "
         formatter.decimalFormatSymbols = symbols
+
+        var activeAction = "add"
+
+        binding.cardAdd.setOnClickListener{
+            activeAction = "add"
+            binding.cardAdd.setCardBackgroundColor(ContextCompat.getColor(this, R.color.green))
+            binding.cardMinus.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        }
+
+        binding.cardMinus.setOnClickListener{
+            activeAction = "minus"
+            binding.cardAdd.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.cardMinus.setCardBackgroundColor(ContextCompat.getColor(this, R.color.green))
+        }
 
         val name = intent.getStringExtra("name")
         val balance = intent.getStringExtra("balance")?.toFloat()
