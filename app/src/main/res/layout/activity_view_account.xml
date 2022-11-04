@@ -19,10 +19,10 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/menu"
+                android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_menu_24"
+                android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -33,20 +33,21 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="22dp"
                 android:text="LandBank"
+                android:id="@+id/accountName"
                 android:textColor="@color/white"
                 android:theme="?actionBarTabTextStyle"
-                app:layout_constraintStart_toEndOf="@id/menu" />
+                app:layout_constraintStart_toEndOf="@id/back" />
 
 
             <ImageView
+                android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_delete_24"
-                app:layout_constraintEnd_toStartOf="@id/edit"
-                app:layout_constraintTop_toTopOf="@id/edit"
-                app:layout_constraintBottom_toBottomOf="@id/edit"
                 android:layout_marginEnd="22dp"
-                android:id="@+id/delete"/>
+                android:src="@drawable/ic_baseline_delete_24"
+                app:layout_constraintBottom_toBottomOf="@id/edit"
+                app:layout_constraintEnd_toStartOf="@id/edit"
+                app:layout_constraintTop_toTopOf="@id/edit" />
 
             <ImageView
                 android:id="@+id/edit"
@@ -66,7 +67,6 @@
         android:layout_height="108dp"
         android:layout_marginHorizontal="22dp"
         android:layout_marginTop="22dp"
-        android:backgroundTint="@color/green"
         app:cardCornerRadius="10dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
@@ -81,16 +81,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Balance"
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/white"
                 android:textSize="12dp" />
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/totalBalance"
                 style="@style/textStyleDark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="₱ 54,000.00"
+                android:text="₱ 0.00"
                 android:textSize="30sp" />
 
         </LinearLayout>
@@ -106,57 +107,56 @@
         app:layout_constraintStart_toStartOf="@id/cardBalance"
         app:layout_constraintTop_toBottomOf="@id/cardBalance" />
 
-    <LinearLayout
-        android:id="@+id/actions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:orientation="horizontal"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardAdd"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="5dp"
         app:layout_constraintStart_toStartOf="@id/textAction"
         app:layout_constraintTop_toBottomOf="@id/textAction">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            app:cardCornerRadius="5dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="+"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="+"
+                android:textColor="@color/dark_blue"
+                android:textSize="40sp" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
-                    android:textColor="@color/dark_blue"
-                    android:textSize="40sp" />
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardMinus"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="15dp"
+        app:cardBackgroundColor="@color/green"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/cardAdd"
+        app:layout_constraintStart_toEndOf="@id/cardAdd"
+        app:layout_constraintTop_toTopOf="@id/cardAdd">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="15dp"
-            app:cardBackgroundColor="@color/green"
-            app:cardCornerRadius="5dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="-"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="40sp" />
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="-"
+                android:textColor="@color/dark_blue"
+                android:textSize="40sp" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textAmount"
@@ -165,8 +165,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Amount"
-        app:layout_constraintStart_toStartOf="@id/actions"
-        app:layout_constraintTop_toBottomOf="@id/actions" />
+        app:layout_constraintStart_toStartOf="@id/cardAdd"
+        app:layout_constraintTop_toBottomOf="@id/cardAdd" />
 
     <EditText
 
@@ -177,28 +177,36 @@
         android:layout_marginTop="5dp"
         android:background="@color/edit_text_background"
         android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/textAmount" />
+        app:layout_constraintTop_toBottomOf="@id/textAmount"
+        tools:ignore="TouchTargetSizeCheck"
+        tools:layout_editor_absoluteX="22dp" />
 
-    <TextView
-        android:id="@+id/textNewBalance"
-        style="@style/textStyleDark"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutNewBalance"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Amount"
+        android:layout_marginHorizontal="22dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="@id/editAmount"
-        app:layout_constraintTop_toBottomOf="@id/editAmount" />
+        app:layout_constraintTop_toBottomOf="@id/editAmount">
 
-    <TextView
-        android:id="@+id/valueNewBalance"
-        style="@style/textStyleDark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="6,000.00"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="@id/textNewBalance"
-        app:layout_constraintTop_toBottomOf="@id/textNewBalance" />
+        <TextView
+            android:id="@+id/textNewBalance"
+            style="@style/textStyleDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="New balance" />
+
+        <TextView
+            android:id="@+id/valueNewBalance"
+            style="@style/textStyleDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="30sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnSave"
