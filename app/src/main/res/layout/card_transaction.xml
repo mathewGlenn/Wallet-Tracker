@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="30dp">
+
+        <TextView
+            android:id="@+id/transactionAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+
+            android:text="₱2, 000.00"
+            android:textColor="#186B1B"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/transactionAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gcash"
+            android:textColor="@color/dark_blue_2"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/transactionNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:text="Payment Thesis Tobacco"
+            android:textColor="@color/dark_blue_2"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/transactionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:text="Nov 11, 2022 11:24 PM "
+            android:textColor="@color/dark_blue_2"
+            android:textSize="11sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height=".5dp"
+        android:layout_marginVertical="10dp"
+        android:background="#B5B5B5" />
 </LinearLayout>

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_2"
     tools:context=".MainActivity">
-
+    
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -56,29 +56,45 @@
             app:cardCornerRadius="10dp"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="14dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Balance"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="12dp" />
+                    android:src="@drawable/ic_baseline_visibility_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_margin="14dp"
+                    android:id="@+id/toggleAmountVisibility"/>
 
-                <TextView
-                    android:id="@+id/totalBalance"
-                    style="@style/textStyleDark"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textSize="30sp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="14dp"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balance"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/totalBalance"
+                        style="@style/textStyleDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="30sp" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -104,20 +120,49 @@
             app:layout_constraintEnd_toEndOf="@id/cardBalance"
             app:layout_constraintTop_toBottomOf="@id/cardBalance" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
 
-            android:layout_marginTop="9dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/btnAddAccount">
             <androidx.recyclerview.widget.RecyclerView
+                app:layout_constraintTop_toBottomOf="@id/btnAddAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/accountRecyView"
                 android:clipToPadding="false"
                 android:paddingBottom="10dp"
                 />
-        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recentTransacsTitle"
+            app:layout_constraintTop_toBottomOf="@id/accountRecyView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="22dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recent Transactions"
+                style="@style/textStyleDark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="History"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:textAllCaps="false"
+                android:textColor="@color/dark_blue_2"
+                android:id="@+id/btnAllTransactions"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/recentTransacsTitle"
+            android:layout_marginTop="12dp"
+            android:id="@+id/recentTransRecyView"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -10,7 +10,6 @@ public class Account {
         this.balance = balance;
         this.color = color;
     }
-
     public String getName() {
         return name;
     }

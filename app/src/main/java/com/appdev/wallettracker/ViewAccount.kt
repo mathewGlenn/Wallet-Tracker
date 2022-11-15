@@ -23,6 +23,7 @@ class ViewAccount : AppCompatActivity() {
 
     lateinit var firestore: FirebaseFirestore
     lateinit var reference: DocumentReference
+    lateinit var transactionReference: DocumentReference
     lateinit var user: FirebaseUser
     var activeAction = "add"
     var newBalance = 0.0f
@@ -55,6 +56,11 @@ class ViewAccount : AppCompatActivity() {
             .document(user.uid)
             .collection("account")
             .document(accountID)
+
+        transactionReference = firestore.collection("allAccounts")
+            .document(user.uid)
+            .collection("transactionsHistory")
+            .document()
 
         binding.cardAdd.setOnClickListener {
             activeAction = "add"
@@ -102,19 +108,19 @@ class ViewAccount : AppCompatActivity() {
         })
 
         binding.btnSave.setOnClickListener {
-            if (newBalance < 0){
+            if (newBalance < 0) {
                 Toast.makeText(this, "Cant save negative balance", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            val amount = binding.editAmount.text.toString().toInt()
+            val note = binding.editNote.text.toString()
+            val date = Date()
+            val timeStamp = date.time
+            val transaction = Transaction(name, activeAction, note, amount, timeStamp)
 
-            reference.update(mapOf("balance" to newBalance.toString())).addOnSuccessListener {
-                Toast.makeText(applicationContext, "Balance updated", Toast.LENGTH_SHORT).show()
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(applicationContext, "Error updating balance", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
+            reference.update(mapOf("balance" to newBalance.toString()))
+            transactionReference.set(transaction)
+            finish()
         }
 
         binding.edit.setOnClickListener {
