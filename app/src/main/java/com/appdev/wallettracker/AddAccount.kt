@@ -31,6 +31,12 @@ class AddAccount : AppCompatActivity() {
                 .document(user.uid)
                 .collection("account").document()
 
+        val transactionReference: DocumentReference =
+            firestore.collection("allAccounts")
+            .document(user.uid)
+            .collection("transactionsHistory")
+            .document()
+
         binding.btnSave.setOnClickListener {
             if (binding.editAccountName.text.isEmpty() || binding.editBalance.text.isEmpty()) {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
@@ -43,9 +49,12 @@ class AddAccount : AppCompatActivity() {
 
             val account = Account(accountName, accountBalance, accountColor)
 
-            documentReference.set(account).addOnFailureListener { e ->
-                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
-            }
+            documentReference.set(account)
+
+            val date = Date()
+            val timeStamp = date.time
+            val transaction = Transaction(accountName, "add", "Account creation", accountBalance.toInt(), timeStamp)
+            transactionReference.set(transaction)
 
             finish()
         }

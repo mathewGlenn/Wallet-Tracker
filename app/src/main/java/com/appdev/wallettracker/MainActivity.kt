@@ -158,6 +158,10 @@ lateinit var binding: ActivityMainBinding
                         symbol = "- $amount"
                         holder.transactionAmount.setTextColor(Color.parseColor("#E51F16"))
                     }
+
+                    if (note.isEmpty()){
+                        holder.transactionNote.visibility = View.GONE
+                    }
                     holder.transactionAmount.text = symbol
                     holder.transactionNote.text = note
                     holder.transactionDate.text = dateFormatter(date.toString())

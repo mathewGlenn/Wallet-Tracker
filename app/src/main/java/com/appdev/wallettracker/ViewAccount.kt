@@ -112,14 +112,16 @@ class ViewAccount : AppCompatActivity() {
                 Toast.makeText(this, "Cant save negative balance", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            reference.update(mapOf("balance" to newBalance.toString()))
+
             val amount = binding.editAmount.text.toString().toInt()
             val note = binding.editNote.text.toString()
             val date = Date()
             val timeStamp = date.time
             val transaction = Transaction(name, activeAction, note, amount, timeStamp)
 
-            reference.update(mapOf("balance" to newBalance.toString()))
             transactionReference.set(transaction)
+
             finish()
         }
 
