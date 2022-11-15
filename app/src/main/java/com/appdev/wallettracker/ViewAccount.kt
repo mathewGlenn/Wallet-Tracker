@@ -106,7 +106,7 @@ class ViewAccount : AppCompatActivity() {
                 Toast.makeText(this, "Cant save negative balance", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            
+
             reference.update(mapOf("balance" to newBalance.toString())).addOnSuccessListener {
                 Toast.makeText(applicationContext, "Balance updated", Toast.LENGTH_SHORT).show()
                 finish()
