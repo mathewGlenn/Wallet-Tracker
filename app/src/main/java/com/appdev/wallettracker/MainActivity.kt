@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appdev.wallettracker.databinding.ActivityMainBinding
@@ -27,21 +29,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
 class MainActivity : AppCompatActivity() {
-
 
 
     private lateinit var accountsList: RecyclerView
     private lateinit var recentTransactionsList: RecyclerView
     private lateinit var firestore: FirebaseFirestore
     private lateinit var entryAdapter: FirestoreRecyclerAdapter<Account, ViewHolder>
-    private  lateinit var transactionAdapter: FirestoreRecyclerAdapter<Transaction, TransactionViewHolder>
-lateinit var binding: ActivityMainBinding
+    private lateinit var transactionAdapter: FirestoreRecyclerAdapter<Transaction, TransactionViewHolder>
+    lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
 
@@ -61,7 +62,7 @@ lateinit var binding: ActivityMainBinding
         val query = firestore.collection("allAccounts")
             .document(user.uid)
             .collection("account")
-            .orderBy("balance", Query.Direction.ASCENDING)
+            .orderBy("balance", Query.Direction.DESCENDING)
 
         val transactionsQuery = firestore.collection("allAccounts")
             .document(user.uid)
@@ -94,7 +95,7 @@ lateinit var binding: ActivityMainBinding
                     val accountID = entryAdapter.snapshots.getSnapshot(position).id
 
                     holder.view.setOnClickListener {
-                       val intent = Intent(applicationContext, ViewAccount::class.java)
+                        val intent = Intent(applicationContext, ViewAccount::class.java)
                         intent.putExtra("name", name)
                         intent.putExtra("balance", balance)
                         intent.putExtra("color", color)
@@ -115,14 +116,14 @@ lateinit var binding: ActivityMainBinding
                     super.onDataChanged()
 
 
-                    if (itemCount == 0){
+                    if (itemCount == 0) {
                         binding.totalBalance.text = "₱ 0.00"
-                    }else{
-                        query.get().addOnCompleteListener{
-                            if (it.isSuccessful){
+                    } else {
+                        query.get().addOnCompleteListener {
+                            if (it.isSuccessful) {
                                 var total = 0.0f
                                 for (document in it.result) {
-                                    val totalBalance = document.getString("balance")!!.toFloat()
+                                    val totalBalance = document.getDouble("balance")!!.toFloat()
                                     total += totalBalance
                                 }
 
@@ -141,7 +142,11 @@ lateinit var binding: ActivityMainBinding
                 FirestoreRecyclerAdapter<Transaction, TransactionViewHolder>(
                     transactions
                 ) {
-                override fun onBindViewHolder(holder: TransactionViewHolder, position: Int, transaction: Transaction) {
+                override fun onBindViewHolder(
+                    holder: TransactionViewHolder,
+                    position: Int,
+                    transaction: Transaction,
+                ) {
                     val account = transaction.account
                     val action = transaction.action
                     val amount = formatter.format(transaction.amount.toFloat())
@@ -151,15 +156,15 @@ lateinit var binding: ActivityMainBinding
 
                     holder.transactionAccount.text = account
 
-                    if (action == "add"){
+                    if (action == "add") {
                         symbol = "+ $amount"
                         holder.transactionAmount.setTextColor(Color.parseColor("#186B1B"))
-                    }else{
+                    } else {
                         symbol = "- $amount"
                         holder.transactionAmount.setTextColor(Color.parseColor("#E51F16"))
                     }
 
-                    if (note.isEmpty()){
+                    if (note.isEmpty()) {
                         holder.transactionNote.visibility = View.GONE
                     }
                     holder.transactionAmount.text = symbol
@@ -170,7 +175,10 @@ lateinit var binding: ActivityMainBinding
                     }
                 }
 
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
+                override fun onCreateViewHolder(
+                    parent: ViewGroup,
+                    viewType: Int,
+                ): TransactionViewHolder {
                     val transactionView: View =
                         LayoutInflater.from(parent.context)
                             .inflate(R.layout.card_transaction, parent, false)
@@ -180,6 +188,11 @@ lateinit var binding: ActivityMainBinding
 
                 override fun onDataChanged() {
                     super.onDataChanged()
+
+
+                    if (itemCount == 0) {
+                        binding.recentTransacsTitle.visibility = View.GONE
+                    }
                 }
             }
 
@@ -192,21 +205,18 @@ lateinit var binding: ActivityMainBinding
             startActivity(Intent(this, AddAccount::class.java))
         }
 
-        binding.menu.setOnClickListener {
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
-        }
 
-        binding.btnAllTransactions.setOnClickListener{
+        binding.btnAllTransactions.setOnClickListener {
             startActivity(Intent(this, TransactionsHistory::class.java))
         }
-
 
 
     }
 
     @SuppressLint("SimpleDateFormat")
     fun dateFormatter(milliseconds: String): String {
-        return SimpleDateFormat("MMM d, yyyy   hh:mm a ").format(Date(milliseconds.toLong())).toString()
+        return SimpleDateFormat("MMM d, yyyy   hh:mm a ").format(Date(milliseconds.toLong()))
+            .toString()
     }
 
     override fun onStart() {

@@ -47,13 +47,13 @@ class AddAccount : AppCompatActivity() {
             val accountBalance = binding.editBalance.text.toString()
             val accountColor = colorHex
 
-            val account = Account(accountName, accountBalance, accountColor)
+            val account = Account(accountName, accountBalance.toFloat(), accountColor)
 
             documentReference.set(account)
 
             val date = Date()
             val timeStamp = date.time
-            val transaction = Transaction(accountName, "add", "Account creation", accountBalance.toInt(), timeStamp)
+            val transaction = Transaction(accountName, "add", "Account creation", accountBalance.toFloat(), timeStamp)
             transactionReference.set(transaction)
 
             finish()

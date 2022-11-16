@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white_2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_2"
     tools:context=".MainActivity">
-    
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -24,16 +18,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/menu"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_menu_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
                     style="@style/toolbarText"
                     android:layout_width="wrap_content"
@@ -42,127 +26,245 @@
                     android:text="@string/app_title"
                     android:textColor="@color/white"
                     android:theme="?actionBarTabTextStyle"
-                    app:layout_constraintStart_toEndOf="@id/menu" />
+                  app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardBalance"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="108dp"
-            android:layout_marginHorizontal="22dp"
-            android:layout_marginTop="22dp"
-            app:cardCornerRadius="10dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <ImageView
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardBalance"
+                    android:layout_width="match_parent"
+                    android:layout_height="108dp"
+                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginTop="22dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/toggleAmountVisibility"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="14dp"
+                            android:src="@drawable/ic_baseline_visibility_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginHorizontal="14dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Balance"
+                                android:textColor="@color/dark_blue"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:id="@+id/totalBalance"
+                                style="@style/textStyleDark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:textSize="30sp" />
+
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    style="@style/textStyleDark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_visibility_24"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_margin="14dp"
-                    android:id="@+id/toggleAmountVisibility"/>
+                    android:text="List of accounts"
+                    app:layout_constraintBottom_toBottomOf="@id/btnAddAccount"
+                    app:layout_constraintStart_toStartOf="@id/cardBalance"
+                    app:layout_constraintTop_toTopOf="@id/btnAddAccount"
 
-                <LinearLayout
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <Button
+                    android:id="@+id/btnAddAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:backgroundTint="@color/green"
+                    android:drawableLeft="@drawable/ic_baseline_add_circle_outline_24"
+                    android:text="Add Account"
+                    android:textAllCaps="false"
+                    app:layout_constraintEnd_toEndOf="@id/cardBalance"
+                    app:layout_constraintTop_toBottomOf="@id/cardBalance" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/accountRecyView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="14dp"
-                    android:orientation="vertical">
+                    android:clipToPadding="false"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/btnAddAccount" />
+
+                <TextView
+                    android:id="@+id/moreToolsTitle"
+                    style="@style/textStyleDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="More Tools"
+                    app:layout_constraintStart_toStartOf="@id/cardBalance"
+                    app:layout_constraintTop_toBottomOf="@id/accountRecyView" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="@id/moreToolsTitle"
+                        app:layout_constraintTop_toBottomOf="@id/moreToolsTitle"
+                        android:id="@+id/cardExpenses" style="@style/toolCardView">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_baseline_shopping_cart_24"
+                                app:tint="@color/dark_blue_2" />
+
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Expenses"
+                                android:textAlignment="center"
+                                android:textColor="@color/dark_blue_2"
+                                android:textSize="11sp"/>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardInvestments"
+                        app:layout_constraintTop_toTopOf="@id/cardExpenses"
+                        app:layout_constraintBottom_toBottomOf="@id/cardExpenses"
+                        app:layout_constraintStart_toEndOf="@id/cardExpenses"
+                        android:layout_marginStart="10dp"
+                        style="@style/toolCardView">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_baseline_insert_chart_24"
+                                app:tint="@color/dark_blue_2" />
+
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Investments"
+                                android:textAlignment="center"
+                                android:textColor="@color/dark_blue_2"
+                                android:textSize="11sp"/>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardReceivables"
+                        app:layout_constraintTop_toTopOf="@id/cardInvestments"
+                        app:layout_constraintBottom_toBottomOf="@id/cardInvestments"
+                        app:layout_constraintStart_toEndOf="@id/cardInvestments"
+                        android:layout_marginStart="10dp"
+                        style="@style/toolCardView">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_baseline_receipt_24"
+                                app:tint="@color/dark_blue_2" />
+
+                            <TextView
+                                android:layout_marginTop="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Receivables"
+                                android:textAlignment="center"
+                                android:textColor="@color/dark_blue_2"
+                                android:textSize="11sp"/>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/recentTransacsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintTop_toBottomOf="@id/cardExpenses">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Balance"
-                        android:textColor="@color/dark_blue"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:id="@+id/totalBalance"
                         style="@style/textStyleDark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textSize="30sp" />
+                        android:text="Recent Transactions"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
+                    <Button
+                        android:id="@+id/btnAllTransactions"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/ic_baseline_history_24"
+                        android:text="History"
+                        android:textAllCaps="false"
+                        android:textColor="@color/dark_blue_2"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recentTransRecyView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp"
+                    android:paddingBottom="60dp"
+                    app:layout_constraintTop_toBottomOf="@id/recentTransacsTitle" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            style="@style/textStyleDark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="List of accounts"
-            app:layout_constraintBottom_toBottomOf="@id/btnAddAccount"
-            app:layout_constraintStart_toStartOf="@id/cardBalance"
-            app:layout_constraintTop_toTopOf="@id/btnAddAccount"
-
-            />
-
-        <Button
-            android:id="@+id/btnAddAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/green"
-            android:drawableLeft="@drawable/ic_baseline_add_circle_outline_24"
-            android:text="Add Account"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="@id/cardBalance"
-            app:layout_constraintTop_toBottomOf="@id/cardBalance" />
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                app:layout_constraintTop_toBottomOf="@id/btnAddAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/accountRecyView"
-                android:clipToPadding="false"
-                android:paddingBottom="10dp"
-                />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/recentTransacsTitle"
-            app:layout_constraintTop_toBottomOf="@id/accountRecyView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginHorizontal="22dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recent Transactions"
-                style="@style/textStyleDark"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="History"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:textAllCaps="false"
-                android:textColor="@color/dark_blue_2"
-                android:id="@+id/btnAllTransactions"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/recentTransacsTitle"
-            android:layout_marginTop="12dp"
-            android:id="@+id/recentTransRecyView"/>
-
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>

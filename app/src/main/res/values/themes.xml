@@ -43,4 +43,13 @@
     <style name="toolbarText" parent="android:Widget.TextView">
         <item name="android:textSize">19sp</item>
     </style>
+
+    <style name="toolCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="cardBackgroundColor">@color/tool_card</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
 </resources>

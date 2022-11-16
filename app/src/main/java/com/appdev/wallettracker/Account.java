@@ -1,11 +1,12 @@
 package com.appdev.wallettracker;
 
 public class Account {
-    private String name, balance, color;
+    private String name, color;
+    private Float balance;
 
     public Account(){}
 
-    public Account(String name, String balance, String color){
+    public Account(String name, Float balance, String color){
         this.name = name;
         this.balance = balance;
         this.color = color;
@@ -18,11 +19,11 @@ public class Account {
         this.name = name;
     }
 
-    public String getBalance() {
+    public Float getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(Float balance) {
         this.balance = balance;
     }
 

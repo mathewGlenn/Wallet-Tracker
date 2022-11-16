@@ -2,12 +2,12 @@ package com.appdev.wallettracker;
 
 public class Transaction {
     private String account, action, note;
-    private Integer amount;
+    private Float amount;
     private Long timestamp;
 
     public Transaction(){}
 
-    public Transaction(String account, String action, String note, Integer amount, Long timestamp){
+    public Transaction(String account, String action, String note, Float amount, Long timestamp){
         this.account = account;
         this.action = action;
         this.note = note;
@@ -39,11 +39,11 @@ public class Transaction {
         this.note = note;
     }
 
-    public Integer getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
