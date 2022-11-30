@@ -118,7 +118,7 @@ class ViewAccount : AppCompatActivity() {
             val note = binding.editNote.text.toString()
             val date = Date()
             val timeStamp = date.time
-            val transaction = Transaction(name, activeAction, note, amount, timeStamp)
+            val transaction = Transaction(name, activeAction, note, amount, timeStamp, "account")
 
             transactionReference.set(transaction)
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.appdev.wallettracker.databinding.ActivityAddAccountBinding
+import com.appdev.wallettracker.Account
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
@@ -53,7 +54,7 @@ class AddAccount : AppCompatActivity() {
 
             val date = Date()
             val timeStamp = date.time
-            val transaction = Transaction(accountName, "add", "Account creation", accountBalance.toFloat(), timeStamp)
+            val transaction = Transaction(accountName, "add", "Account creation", accountBalance.toFloat(), timeStamp, "account")
             transactionReference.set(transaction)
 
             finish()

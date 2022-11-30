@@ -16,6 +16,15 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".receivables.ViewReceivable"
+            android:exported="false" />
+        <activity
+            android:name=".receivables.AddReceivable"
+            android:exported="false" />
+        <activity
+            android:name=".receivables.Receivables"
+            android:exported="false" />
+        <activity
             android:name=".TransactionsHistory"
             android:exported="false" />
         <activity
@@ -44,7 +53,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

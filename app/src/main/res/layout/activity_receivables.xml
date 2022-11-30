@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_2"
+    tools:context=".receivables.Receivables">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/dark_blue"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+
+                style="@style/toolbarText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="22dp"
+                android:text="Receivables"
+                android:textColor="@color/white"
+                android:theme="?actionBarTabTextStyle"
+                app:layout_constraintStart_toEndOf="@id/back" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardBalance"
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:layout_marginHorizontal="22dp"
+        android:layout_marginTop="22dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="14dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Uncollected"
+                android:textColor="@color/dark_blue_2"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/totalBalance"
+                style="@style/textStyleDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="₱ 0.00"
+                android:textColor="@color/dark_blue_2"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        style="@style/textStyleDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Uncollected"
+        app:layout_constraintBottom_toBottomOf="@id/btnAddReceivable"
+        app:layout_constraintStart_toStartOf="@id/cardBalance"
+        app:layout_constraintTop_toTopOf="@id/btnAddReceivable"
+
+        />
+
+    <Button
+        android:id="@+id/btnAddReceivable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/green"
+        android:drawableLeft="@drawable/ic_baseline_add_circle_outline_24"
+        android:text="Add Receivable"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@id/cardBalance"
+        app:layout_constraintTop_toBottomOf="@id/cardBalance" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/uncollectedReceiRecyc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@id/btnAddReceivable" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recentCollectedTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="22dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/uncollectedReceiRecyc">
+
+        <TextView
+            style="@style/textStyleDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recently Collected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnAllCollected"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_baseline_history_24"
+            android:text="View all"
+            android:textAllCaps="false"
+            android:textColor="@color/dark_blue_2"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/collectedReceiRecyc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@id/recentCollectedTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

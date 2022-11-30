@@ -1,19 +1,17 @@
-package com.appdev.wallettracker
+package com.appdev.wallettracker.receivables
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.appdev.wallettracker.databinding.ActivityMainBinding
-import com.appdev.wallettracker.receivables.Receivables
+import com.appdev.wallettracker.*
+import com.appdev.wallettracker.databinding.ActivityReceivablesBinding
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -25,21 +23,16 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+class Receivables : AppCompatActivity() {
 
-class MainActivity : AppCompatActivity() {
-
-
-    private lateinit var accountsList: RecyclerView
+    private lateinit var receivablesList: RecyclerView
     private lateinit var recentTransactionsList: RecyclerView
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var entryAdapter: FirestoreRecyclerAdapter<Account, ViewHolder>
-    private lateinit var transactionAdapter: FirestoreRecyclerAdapter<Transaction, TransactionViewHolder>
-    lateinit var binding: ActivityMainBinding
-
-
+    private lateinit var uncollectedReceiAdapter: FirestoreRecyclerAdapter<Receivable, ReceivableViewHolder>
+    private lateinit var collectedReceiAdapter: FirestoreRecyclerAdapter<Transaction, TransactionViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = ActivityReceivablesBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
 
@@ -49,64 +42,71 @@ class MainActivity : AppCompatActivity() {
         symbols.currencySymbol = "₱ "
         formatter.decimalFormatSymbols = symbols
 
-
-        accountsList = binding.accountRecyView
-        recentTransactionsList = binding.recentTransRecyView
+        receivablesList = binding.uncollectedReceiRecyc
+        recentTransactionsList = binding.collectedReceiRecyc
 
         firestore = FirebaseFirestore.getInstance()
         val user: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
 
         val query = firestore.collection("allAccounts")
             .document(user.uid)
-            .collection("account")
-            .orderBy("balance", Query.Direction.DESCENDING)
+            .collection("receivables")
+            .whereEqualTo("collected", false)
+            .orderBy("date", Query.Direction.DESCENDING)
 
-        val transactionsQuery = firestore.collection("allAccounts")
+        val recentCollectedQuery = firestore.collection("allAccounts")
             .document(user.uid)
             .collection("transactionsHistory")
+            .whereEqualTo("type", "receivable")
             .orderBy("timestamp", Query.Direction.DESCENDING)
-            .limit(3)
+            .limit(4)
 
-        val accounts = FirestoreRecyclerOptions.Builder<Account>()
-            .setQuery(query, Account::class.java)
+        val uncollectedReceivables = FirestoreRecyclerOptions.Builder<Receivable>()
+            .setQuery(query, Receivable::class.java)
             .build()
 
-        val transactions = FirestoreRecyclerOptions.Builder<Transaction>()
-            .setQuery(transactionsQuery, Transaction::class.java)
+        val collectedReceivables = FirestoreRecyclerOptions.Builder<Transaction>()
+            .setQuery(recentCollectedQuery, Transaction::class.java)
             .build()
 
-
-        entryAdapter =
+        uncollectedReceiAdapter =
             object :
-                FirestoreRecyclerAdapter<Account, ViewHolder>(
-                    accounts
+                FirestoreRecyclerAdapter<Receivable, ReceivableViewHolder>(
+                    uncollectedReceivables
                 ) {
-                override fun onBindViewHolder(holder: ViewHolder, position: Int, account: Account) {
-                    val name = account.name
-                    val balance = account.balance
-                    val color = account.color
-                    holder.accountName.text = name
-                    holder.accountBalance.text = formatter.format(balance.toFloat())
-                    holder.accountColor.setCardBackgroundColor(Color.parseColor(color))
+                override fun onBindViewHolder(holder: ReceivableViewHolder, position: Int, receivable: Receivable) {
+                    val name = receivable.name
+                    val amount = receivable.amount
+                    val remainingBalance = receivable.remainingBalance
+                    val description = receivable.description
+                    val date = receivable.date
 
-                    val accountID = entryAdapter.snapshots.getSnapshot(position).id
+
+                    holder.receiName.text = name
+                    holder.receiAmount.text = formatter.format(remainingBalance)
+                    holder.receiDescription.text = description
+                    holder.receiDate.text = dateFormatter(date.toString())
+
+                    val accountID = uncollectedReceiAdapter.snapshots.getSnapshot(position).id
 
                     holder.view.setOnClickListener {
-                        val intent = Intent(applicationContext, ViewAccount::class.java)
+                        val intent = Intent(applicationContext, ViewReceivable::class.java)
                         intent.putExtra("name", name)
-                        intent.putExtra("balance", balance.toString())
-                        intent.putExtra("color", color)
+                        intent.putExtra("amount", amount.toString())
+                        intent.putExtra("remaining", remainingBalance.toString())
+                        intent.putExtra("description", description)
+                        intent.putExtra("date", dateFormatter(date.toString()))
                         intent.putExtra("id", accountID)
                         startActivity(intent)
                     }
                 }
 
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                    val accountView: View =
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceivableViewHolder {
+                    val receivableView: View =
                         LayoutInflater.from(parent.context)
-                            .inflate(R.layout.card_account, parent, false)
+                            .inflate(R.layout.card_receivable, parent, false)
 
-                    return ViewHolder(accountView)
+                    return ReceivableViewHolder(receivableView)
                 }
 
                 override fun onDataChanged() {
@@ -115,12 +115,13 @@ class MainActivity : AppCompatActivity() {
 
                     if (itemCount == 0) {
                         binding.totalBalance.text = "₱ 0.00"
+                       // binding.recentCollectedTitle.visibility = View.GONE
                     } else {
                         query.get().addOnCompleteListener {
                             if (it.isSuccessful) {
                                 var total = 0.0f
                                 for (document in it.result) {
-                                    val totalBalance = document.getDouble("balance")!!.toFloat()
+                                    val totalBalance = document.getDouble("remainingBalance")!!.toFloat()
                                     total += totalBalance
                                 }
 
@@ -131,26 +132,26 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        accountsList.layoutManager = LinearLayoutManager(this)
-        accountsList.adapter = entryAdapter
+        receivablesList.layoutManager = LinearLayoutManager(this)
+        receivablesList.adapter = uncollectedReceiAdapter
 
-        transactionAdapter =
+
+
+
+
+
+        collectedReceiAdapter =
             object :
                 FirestoreRecyclerAdapter<Transaction, TransactionViewHolder>(
-                    transactions
+                    collectedReceivables
                 ) {
-                override fun onBindViewHolder(
-                    holder: TransactionViewHolder,
-                    position: Int,
-                    transaction: Transaction,
-                ) {
+                override fun onBindViewHolder(holder: TransactionViewHolder, position: Int, transaction: Transaction) {
                     val account = transaction.account
                     val action = transaction.action
                     val amount = formatter.format(transaction.amount.toFloat())
                     val note = transaction.note
                     val date = transaction.timestamp
                     var symbol = ""
-
                     holder.transactionAccount.text = account
 
                     if (action == "add") {
@@ -167,18 +168,20 @@ class MainActivity : AppCompatActivity() {
                     if (note.isEmpty()) {
                         holder.transactionNote.visibility = View.GONE
                     }
+
                     holder.transactionAmount.text = symbol
                     holder.transactionNote.text = note
                     holder.transactionDate.text = dateFormatter(date.toString())
 
+
+//                    val accountID = uncollectedReceiAdapter.snapshots.getSnapshot(position).id
+
                     holder.view.setOnClickListener {
+//
                     }
                 }
 
-                override fun onCreateViewHolder(
-                    parent: ViewGroup,
-                    viewType: Int,
-                ): TransactionViewHolder {
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
                     val transactionView: View =
                         LayoutInflater.from(parent.context)
                             .inflate(R.layout.card_transaction, parent, false)
@@ -189,60 +192,35 @@ class MainActivity : AppCompatActivity() {
                 override fun onDataChanged() {
                     super.onDataChanged()
 
-
-                    if (itemCount == 0) {
-                        binding.recentTransacsTitle.visibility = View.GONE
-                    }
                 }
             }
 
         recentTransactionsList.layoutManager = LinearLayoutManager(this)
-        recentTransactionsList.adapter = transactionAdapter
+        recentTransactionsList.adapter = collectedReceiAdapter
 
-
-
-        binding.btnAddAccount.setOnClickListener {
-            startActivity(Intent(this, AddAccount::class.java))
+        binding.btnAddReceivable.setOnClickListener{
+            startActivity(Intent(this, AddReceivable::class.java))
         }
 
-
-        binding.btnAllTransactions.setOnClickListener {
-            startActivity(Intent(this, TransactionsHistory::class.java))
-        }
-
-        binding.cardReceivables.setOnClickListener {
-            startActivity(Intent(this, Receivables::class.java))
-        }
 
 
     }
-
     @SuppressLint("SimpleDateFormat")
     fun dateFormatter(milliseconds: String): String {
-        return SimpleDateFormat("MMM d, yyyy   hh:mm a ").format(Date(milliseconds.toLong()))
+        return SimpleDateFormat("MMM d, yyyy").format(Date(milliseconds.toLong()))
             .toString()
     }
 
     override fun onStart() {
         super.onStart()
-        entryAdapter.startListening()
-        transactionAdapter.startListening()
+        uncollectedReceiAdapter.startListening()
+        collectedReceiAdapter.startListening()
 
     }
 
     override fun onStop() {
         super.onStop()
-        entryAdapter.stopListening()
-        transactionAdapter.stopListening()
+        uncollectedReceiAdapter.stopListening()
+        collectedReceiAdapter.stopListening()
     }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var accountName: TextView = itemView.findViewById(R.id.vAccountName)
-        var accountBalance: TextView = itemView.findViewById(R.id.vAccountBalance)
-        var accountColor: CardView = itemView.findViewById(R.id.vAccountColor)
-        var view: View = itemView
-    }
-
-
 }
-
